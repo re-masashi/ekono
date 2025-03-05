@@ -1,0 +1,283 @@
+{
+  "nodes": [
+    {
+      "id": "input-node",
+      "type": "inputNode",
+      "position": {
+        "x": 16.314340344168244,
+        "y": 38.64397705544933
+      },
+      "data": {
+        "type": "inputNode",
+        "label": "Input Node",
+        "inputType": "string"
+      }
+    },
+    {
+      "id": "output-node",
+      "type": "outputNode",
+      "position": {
+        "x": 1140.006276483487,
+        "y": 100
+      },
+      "data": {
+        "type": "outputNode",
+        "label": "Output Node"
+      }
+    },
+    {
+      "id": "dndnode_1",
+      "type": "aiModelNode",
+      "position": {
+        "x": 421.58873693883254,
+        "y": -167.9326715013596
+      },
+      "data": {
+        "type": "TextGeneration",
+        "label": "Text Generation",
+        "subline": "",
+        "arguments": ["text_prompt"],
+        "outputs": ["generated_text"],
+        "models": ["GPT-3", "GPT-2", "Transformer-XL"]
+      }
+    },
+    {
+      "id": "dndnode_1",
+      "type": "aiModelNode",
+      "position": {
+        "x": 421.58873693883254,
+        "y": -167.9326715013596
+      },
+      "data": {
+        "type": "TextGeneration",
+        "label": "Text Generation",
+        "subline": "",
+        "arguments": ["text_prompt"],
+        "outputs": ["generated_text"],
+        "models": ["GPT-3", "GPT-2", "Transformer-XL"]
+      }
+    },
+    {
+      "id": "dndnode_2",
+      "type": "aiModelNode",
+      "position": {
+        "x": 734.4137721102009,
+        "y": -170.95542298720403
+      },
+      "data": {
+        "type": "HumanizeText",
+        "label": "Text Humanization",
+        "subline": "",
+        "arguments": ["text"],
+        "outputs": ["humanized_text"],
+        "models": ["Ekono TextHum", "Ekono TextHum Pro"]
+      }
+    },
+    {
+      "id": "dndnode_2",
+      "type": "aiModelNode",
+      "position": {
+        "x": 734.4137721102009,
+        "y": -170.95542298720403
+      },
+      "data": {
+        "type": "HumanizeText",
+        "label": "Text Humanization",
+        "subline": "",
+        "arguments": ["text"],
+        "outputs": ["humanized_text"],
+        "models": ["Ekono TextHum", "Ekono TextHum Pro"]
+      }
+    },
+    {
+      "id": "dndnode_3",
+      "type": "aiModelNode",
+      "position": {
+        "x": 419.7148088493344,
+        "y": 236.3396324052825
+      },
+      "data": {
+        "type": "Summarization",
+        "label": "Summarization",
+        "subline": "",
+        "arguments": ["text"],
+        "outputs": ["summary"],
+        "models": ["BART", "T5", "Pegasus"]
+      }
+    },
+    {
+      "id": "dndnode_3",
+      "type": "aiModelNode",
+      "position": {
+        "x": 419.7148088493344,
+        "y": 236.3396324052825
+      },
+      "data": {
+        "type": "Summarization",
+        "label": "Summarization",
+        "subline": "",
+        "arguments": ["text"],
+        "outputs": ["summary"],
+        "models": ["BART", "T5", "Pegasus"]
+      }
+    },
+    {
+      "id": "dndnode_4",
+      "type": "aiModelNode",
+      "position": {
+        "x": 704.3084355510889,
+        "y": 219.00398001735837
+      },
+      "data": {
+        "type": "HumanizeText",
+        "label": "Text Humanization",
+        "subline": "",
+        "arguments": ["text"],
+        "outputs": ["humanized_text"],
+        "models": ["Ekono TextHum", "Ekono TextHum Pro"]
+      }
+    },
+    {
+      "id": "dndnode_4",
+      "type": "aiModelNode",
+      "position": {
+        "x": 704.3084355510889,
+        "y": 219.00398001735837
+      },
+      "data": {
+        "type": "HumanizeText",
+        "label": "Text Humanization",
+        "subline": "",
+        "arguments": ["text"],
+        "outputs": ["humanized_text"],
+        "models": ["Ekono TextHum", "Ekono TextHum Pro"]
+      }
+    },
+    {
+      "id": "dndnode_5",
+      "type": "aiModelNode",
+      "position": {
+        "x": 671.0817684742344,
+        "y": 5.197600566294128
+      },
+      "data": {
+        "type": "TextToSpeech",
+        "label": "Text to Speech",
+        "subline": "",
+        "arguments": ["text"],
+        "outputs": ["audio"],
+        "models": ["Tacotron 2", "FastSpeech 2", "WaveNet"]
+      }
+    },
+    {
+      "id": "dndnode_5",
+      "type": "aiModelNode",
+      "position": {
+        "x": 671.0817684742344,
+        "y": 5.197600566294128
+      },
+      "data": {
+        "type": "TextToSpeech",
+        "label": "Text to Speech",
+        "subline": "",
+        "arguments": ["text"],
+        "outputs": ["audio"],
+        "models": ["Tacotron 2", "FastSpeech 2", "WaveNet"]
+      }
+    },
+    {
+      "id": "dndnode_6",
+      "type": "aiModelNode",
+      "position": {
+        "x": 706.3196560854145,
+        "y": 396.65578078760404
+      },
+      "data": {
+        "type": "TextToSpeech",
+        "label": "Text to Speech",
+        "subline": "",
+        "arguments": ["text"],
+        "outputs": ["audio"],
+        "models": ["Tacotron 2", "FastSpeech 2", "WaveNet"]
+      }
+    },
+    {
+      "id": "dndnode_6",
+      "type": "aiModelNode",
+      "position": {
+        "x": 706.3196560854145,
+        "y": 396.65578078760404
+      },
+      "data": {
+        "type": "TextToSpeech",
+        "label": "Text to Speech",
+        "subline": "",
+        "arguments": ["text"],
+        "outputs": ["audio"],
+        "models": ["Tacotron 2", "FastSpeech 2", "WaveNet"]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "input-node",
+      "target": "dndnode_1",
+      "sourceHandle": "output-0",
+      "targetHandle": "text_prompt"
+    },
+    {
+      "source": "dndnode_1",
+      "target": "dndnode_2",
+      "sourceHandle": "output",
+      "targetHandle": "text"
+    },
+    {
+      "source": "dndnode_1",
+      "target": "dndnode_3",
+      "sourceHandle": "output",
+      "targetHandle": "text"
+    },
+    {
+      "source": "dndnode_3",
+      "target": "dndnode_4",
+      "sourceHandle": "output",
+      "targetHandle": "text"
+    },
+    {
+      "source": "dndnode_2",
+      "target": "dndnode_5",
+      "sourceHandle": "output",
+      "targetHandle": "text"
+    },
+    {
+      "source": "dndnode_4",
+      "target": "dndnode_6",
+      "sourceHandle": "output",
+      "targetHandle": "text"
+    },
+    {
+      "source": "dndnode_2",
+      "target": "output-node",
+      "sourceHandle": "output",
+      "targetHandle": "input-handle-0"
+    },
+    {
+      "source": "dndnode_4",
+      "target": "output-node",
+      "sourceHandle": "output",
+      "targetHandle": "input-handle-1"
+    },
+    {
+      "source": "dndnode_5",
+      "target": "output-node",
+      "sourceHandle": "output",
+      "targetHandle": "input-handle-2"
+    },
+    {
+      "source": "dndnode_6",
+      "target": "output-node",
+      "sourceHandle": "output",
+      "targetHandle": "input-handle-3"
+    }
+  ]
+}

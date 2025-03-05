@@ -1,0 +1,531 @@
+.react-flow {
+  --bg-color: var(--editor-bg); /* Ekono: Primary Background */
+  --text-color: var(--text-primary); /* Ekono: White Text */
+  --node-border-radius: 10px;
+  --node-box-shadow:
+    10px 0 15px rgba(42, 138, 246, 0.3), -10px 0 15px rgba(233, 42, 103, 0.3); /* Shadow colors kept as is, can be adjusted to Ekono purple/blue later if desired */
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.react-flow__node-turbo {
+  border-radius: var(--node-border-radius);
+  display: flex;
+  height: 70px;
+  min-width: 150px;
+  font-family: "Fira Mono", Monospace;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  box-shadow: var(--node-box-shadow);
+}
+
+.react-flow__node-turbo .wrapper {
+  overflow: hidden;
+  display: flex;
+  padding: 2px;
+  position: relative;
+  border-radius: var(--node-border-radius);
+  flex-grow: 1;
+}
+
+.gradient:before {
+  background: conic-gradient(
+    from -160deg at 50% 50%,
+    #a020f0 0deg,
+    /* Start with purple */ #2a8af6 120deg,
+    /* Transition to blue */ #ff00ff 240deg,
+    /* Then to fuchsia */ #a020f0 360deg /* Back to purple */
+  );
+}
+
+.react-flow__node-ekono.selected .wrapper.gradient:before,
+.react-flow__node-databaseSchemaNode.selected .wrapper.gradient:before,
+.react-flow__node-aiModelNode.selected .wrapper.gradient:before,
+.react-flow__node-inputNode.selected .wrapper.gradient:before,
+.react-flow__node-outputNode.selected .wrapper.gradient:before {
+  background: conic-gradient(
+    from -160deg at 50% 50%,
+    #a020f0 0deg,
+    /* Purple start */ #2a8af6 120deg,
+    /* Blue mid */ #ff00ff 240deg,
+    /* Fuchsia mid */ rgba(160, 32, 240, 0) 360deg /* Purple transparent end */
+  );
+}
+
+/* Update the edge gradient in the SVG */
+svg linearGradient#edge-gradient stop:first-child {
+  stop-color: #ff00ff; /* Fuchsia */
+}
+
+svg linearGradient#edge-gradient stop:last-child {
+  stop-color: #2a8af6; /* Blue */
+}
+
+.react-flow__node-turbo.selected .wrapper.gradient:before {
+  content: "";
+  background: conic-gradient(
+    from -160deg at 50% 50%,
+    #e92a67 0deg,
+    /* Pink from original gradient - can adjust to Ekono purple/cyan if desired */
+      #a853ba 120deg,
+    /* Purple from original gradient - good with Ekono */ #2a8af6 240deg,
+    /* Blue from original gradient - can adjust to Ekono cyan if desired */
+      rgba(42, 138, 246, 0) 360deg
+      /* Blue transparent end - can adjust to Ekono cyan if desired */
+  );
+  animation: spinner 4s linear infinite;
+  transform: translate(-50%, -50%) rotate(0deg);
+  z-index: -1;
+}
+
+@keyframes spinner {
+  100% {
+    transform: translate(-50%, -50%) rotate(-360deg);
+  }
+}
+
+.react-flow__node-turbo .inner {
+  background: var(--editor-bg); /* Ekono: Primary Background */
+  padding: 16px 20px;
+  border-radius: var(--node-border-radius);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  position: relative;
+}
+
+.react-flow__node-turbo .icon {
+  margin-right: 8px;
+  color: var(--text-interactive); /* Ekono: Light Purple Interactive Text */
+}
+
+.react-flow__node-turbo .body {
+  display: flex;
+}
+
+.react-flow__node-turbo .title {
+  font-size: 16px;
+  margin-bottom: 2px;
+  line-height: 1;
+  color: var(--text-primary); /* Ekono: White Text */
+}
+
+.react-flow__node-turbo .subline {
+  font-size: 12px;
+  color: var(--text-secondary); /* Ekono: Medium Gray Text */
+}
+
+.react-flow__node-turbo .cloud {
+  border-radius: 100%;
+  width: 30px;
+  height: 30px;
+  right: 0;
+  position: absolute;
+  top: 0;
+  transform: translate(50%, -50%);
+  display: flex;
+  transform-origin: center center;
+  padding: 2px;
+  overflow: hidden;
+  box-shadow: var(--node-box-shadow);
+  z-index: 1;
+}
+
+.react-flow__node-turbo .cloud div {
+  background-color: var(
+    --panel-bg
+  ); /* Ekono: Secondary Backgrounds (Panels, Toolbars) */
+  flex-grow: 1;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  color: var(
+    --text-interactive
+  ); /* Ekono: Light Purple Interactive Text for cloud icon */
+}
+
+.react-flow__handle {
+  opacity: 0; /* Keep handle opacity as is - handles made visible in component styles */
+}
+
+.react-flow__handle.source {
+  right: -10px; /* Keep handle positioning as is */
+}
+
+.react-flow__handle.target {
+  left: -10px; /* Keep handle positioning as is */
+}
+
+.react-flow__node:focus {
+  outline: none; /* Keep focus outline reset as is */
+}
+
+.react-flow__edge .react-flow__edge-path {
+  stroke: url(#edge-gradient); /* Keep edge gradient as is, it uses variables already */
+  stroke-width: 2;
+  stroke-opacity: 0.75;
+}
+
+.react-flow__controls button {
+  background-color: var(
+    --panel-bg
+  ); /* Ekono: Secondary Backgrounds (Panels, Toolbars) */
+  color: var(--text-primary); /* Ekono: White Text */
+  border: 1px solid var(--accent-primary-purple); /* Ekono: Vibrant Purple for border */
+  border-bottom: none;
+}
+
+.react-flow__controls button:hover {
+  background-color: var(
+    --panel-bg-lighter
+  ); /* Ekono: Lighter Panel Background for hover */
+}
+
+.react-flow__controls button:first-child {
+  border-radius: 5px 5px 0 0; /* Keep border radius as is */
+}
+
+.react-flow__controls button:last-child {
+  border-bottom: 1px solid var(--accent-primary-purple); /* Ekono: Vibrant Purple for border-bottom */
+  border-radius: 0 0 5px 5px; /* Keep border radius as is */
+}
+
+.react-flow__controls button path {
+  fill: var(--text-primary); /* Ekono: White Text for icon fill */
+}
+
+.react-flow__attribution {
+  background: rgba(
+    200,
+    200,
+    200,
+    0.2
+  ); /* Keep attribution as is - semi-transparent */
+}
+
+.react-flow__attribution a {
+  color: var(
+    --accent-primary-purple
+  ); /* Ekono: Vibrant Purple for link color */
+}
+
+.react-flow {
+  --bg-color: var(--editor-bg); /* Ekono: Primary Background */
+  --text-color: var(--text-primary); /* Ekono: White Text */
+  --node-border-radius: 10px;
+  --node-box-shadow:
+    10px 0 15px rgba(42, 138, 246, 0.3), -10px 0 15px rgba(233, 42, 103, 0.3); /* Shadow colors kept as is */
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.react-flow__node-turbo,
+.react-flow__node-databaseSchemaNode,
+.react-flow__node-aiModelNode {
+  /* Added aiModelNode to shared styles */
+  border-radius: var(--node-border-radius);
+  display: flex;
+  font-family: "Fira Mono", Monospace;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  box-shadow: var(--node-box-shadow);
+}
+
+.react-flow__node-turbo .wrapper,
+.react-flow__node-databaseSchemaNode .wrapper,
+.react-flow__node-aiModelNode .wrapper {
+  /* Added aiModelNode to shared wrapper styles */
+  overflow: hidden;
+  display: flex;
+  padding: 2px;
+  position: relative;
+  border-radius: var(--node-border-radius);
+  flex-grow: 1;
+}
+
+.gradient:before {
+  /* Gradient animation style - shared */
+  content: "";
+  position: absolute;
+  padding-bottom: calc(100% * 1.41421356237);
+  width: calc(100% * 1.41421356237);
+  background: conic-gradient(
+    from -160deg at 50% 50%,
+    #e92a67 0deg,
+    /* Pink from original gradient - can adjust to Ekono purple/cyan if desired */
+      #a853ba 120deg,
+    /* Purple from original gradient - good with Ekono */ #2a8af6 240deg,
+    /* Blue from original gradient - can adjust to Ekono cyan if desired */
+      #e92a67 360deg
+      /* Pink from original gradient - can adjust to Ekono purple/cyan if desired */
+  );
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 100%;
+}
+
+.react-flow__node-turbo.selected .wrapper.gradient:before,
+.react-flow__node-databaseSchemaNode.selected .wrapper.gradient:before,
+.react-flow__node-aiModelNode.selected .wrapper.gradient:before {
+  /* Added aiModelNode to selected gradient styles */
+  content: "";
+  background: conic-gradient(
+    from -160deg at 50% 50%,
+    #e92a67 0deg,
+    /* Pink from original gradient - can adjust to Ekono purple/cyan if desired */
+      #a853ba 120deg,
+    /* Purple from original gradient - good with Ekono */ #2a8af6 240deg,
+    /* Blue from original gradient - can adjust to Ekono cyan if desired */
+      rgba(42, 138, 246, 0) 360deg
+      /* Blue transparent end - can adjust to Ekono cyan if desired */
+  );
+  animation: spinner 4s linear infinite;
+  transform: translate(-50%, -50%) rotate(0deg);
+  z-index: -1;
+}
+
+@keyframes spinner {
+  /* Spinner animation - shared */
+  100% {
+    transform: translate(-50%, -50%) rotate(-360deg);
+  }
+}
+
+.react-flow__node-turbo .inner,
+.react-flow__node-databaseSchemaNode .inner,
+.react-flow__node-aiModelNode .inner {
+  /* Shared inner node styles */
+  background: var(--editor-bg); /* Ekono: Primary Background */
+  padding: 16px 20px;
+  border-radius: var(--node-border-radius);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  position: relative;
+}
+
+.react-flow__node-turbo .icon,
+.react-flow__node-databaseSchemaNode .icon,
+.react-flow__node-aiModelNode .icon {
+  /* Added aiModelNode to shared icon styles */
+  margin-right: 8px;
+  color: var(
+    --text-interactive
+  ); /* Ekono: Light Purple Interactive Text for icons */
+}
+
+.react-flow__node-turbo .body,
+.react-flow__node-databaseSchemaNode .body,
+.react-flow__node-aiModelNode .body {
+  /* Added aiModelNode to shared body styles */
+  display: flex;
+}
+
+.react-flow__node-turbo .title,
+.react-flow__node-databaseSchemaNode .title,
+.react-flow__node-aiModelNode .title {
+  /* Added aiModelNode to shared title styles */
+  font-size: 16px;
+  margin-bottom: 2px;
+  line-height: 1;
+  color: var(--text-primary); /* Ekono: White Text for titles */
+}
+
+.react-flow__node-turbo .subline,
+.react-flow__node-databaseSchemaNode .subline,
+.react-flow__node-aiModelNode .subline {
+  /* Added aiModelNode to shared subline styles */
+  font-size: 12px;
+  color: var(--text-secondary); /* Ekono: Medium Gray Text for sublines */
+}
+
+.react-flow__node-turbo .cloud,
+.react-flow__node-databaseSchemaNode .cloud,
+.react-flow__node-aiModelNode .cloud {
+  /* Added aiModelNode to shared cloud styles */
+  border-radius: 100%;
+  width: 30px;
+  height: 30px;
+  right: 0;
+  position: absolute;
+  top: 0;
+  transform: translate(50%, -50%);
+  display: flex;
+  transform-origin: center center;
+  padding: 2px;
+  overflow: hidden;
+  box-shadow: var(--node-box-shadow);
+  z-index: 1;
+}
+
+.react-flow__node-turbo .cloud div,
+.react-flow__node-databaseSchemaNode .cloud div,
+.react-flow__node-aiModelNode .cloud div {
+  /* Added aiModelNode to shared cloud div styles */
+  background-color: var(
+    --panel-bg
+  ); /* Ekono: Secondary Backgrounds (Panels, Toolbars) for cloud background */
+  flex-grow: 1;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  color: var(
+    --text-interactive
+  ); /* Ekono: Light Purple Interactive Text for cloud icon */
+}
+
+/* Specific styles for DatabaseSchemaNode Table & AI Model Table */
+.react-flow__node-databaseSchemaNode .react-flow__node-table-wrapper,
+.react-flow__node-aiModelNode .react-flow__node-table-wrapper {
+  /* Apply to both node types */
+  overflow-x: auto; /* Enable horizontal scrolling for the table */
+}
+
+.react-flow__node-databaseSchemaNode table,
+.react-flow__node-aiModelNode table {
+  /* Apply table styles to both node types */
+  border-spacing: 0; /* Reset table spacing */
+  width: 100%; /* Table takes full width of its container */
+  min-width: 200px; /* Ensure table doesn't collapse to zero width */
+  border-collapse: collapse; /* Important for proper border styling */
+}
+
+.react-flow__node-databaseSchemaNode th,
+.react-flow__node-databaseSchemaNode td,
+.react-flow__node-aiModelNode th,
+.react-flow__node-aiModelNode td {
+  /* Apply cell styles to both node types */
+  padding: 8px 10px; /* Adjust cell padding for table */
+  text-align: left;
+  border-bottom: 1px solid #444; /* Kept as is - dark gray table border */
+  color: var(--text-primary); /* Ekono: White Text for table text */
+  white-space: nowrap; /* Prevent text wrapping in cells */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Indicate overflow with ellipsis */
+  max-width: 150px; /* Limit cell width */
+}
+
+.react-flow__node-databaseSchemaNode th,
+.react-flow__node-aiModelNode th {
+  /* Apply header styles to both node types */
+  font-weight: bold; /* Style table headers */
+  background-color: #222; /* Kept as is - slightly darker header background */
+  color: var(--text-primary); /* Ekono: White Text for table header text */
+}
+
+.react-flow__node-databaseSchemaNode tr:last-child td,
+.react-flow__node-aiModelNode tr:last-child td {
+  /* Apply last row style to both node types */
+  border-bottom: none; /* Remove border on last row's bottom */
+}
+
+.react-flow__node-databaseSchemaNode .react-flow__handle-target,
+.react-flow__node-databaseSchemaNode .react-flow__handle-source,
+.react-flow__node-aiModelNode .react-flow__handle-target, /* Added aiModelNode handles styling */
+.react-flow__node-aiModelNode .react-flow__handle-source {
+  opacity: 1; /* Make handles visible */
+  background: var(
+    --accent-primary-purple
+  ); /* Ekono: Vibrant Purple for handle background */
+  border-radius: 3px; /* Rounded handles */
+  width: 8px; /* Adjust handle size */
+  height: 8px;
+  border: none; /* Remove default border */
+  top: auto; /* Reset default top/bottom positioning */
+  bottom: auto;
+  margin-top: -4px; /* Vertically center handles slightly */
+}
+.react-flow__node-databaseSchemaNode .react-flow__handle-target,
+.react-flow__node-aiModelNode .react-flow__handle-target {
+  /* Target handle positioning */
+  left: -5px; /* Adjust handle position */
+}
+
+.react-flow__node-databaseSchemaNode .react-flow__handle-source,
+.react-flow__node-aiModelNode .react-flow__handle-source {
+  /* Source handle positioning */
+  right: -5px; /* Adjust handle position */
+}
+:root {
+  --editor-bg: #1e1e1e; /* Primary Background */
+  --panel-bg: #282828; /* Secondary Backgrounds (Panels, Toolbars) */
+  --panel-bg-lighter: #333333; /* Lighter Panel Background */
+  --accent-primary-purple: #a020f0; /* Vibrant Purple */
+  --accent-primary-purple-rgb: 160, 32, 240; /* RGB value for vibrant purple */
+  --accent-hover-purple: #c778f7; /* Lighter Purple for Hover */
+  --accent-gradient-button: linear-gradient(
+    to right,
+    #800080,
+    #4b0082
+  ); /* Button Gradient */
+  --accent-secondary-cyan: #00ced1; /* Muted Teal/Cyan (optional) */
+  --accent-secondary-hover-cyan: #48d1cc;
+  --text-primary: #ffffff; /* White Text */
+  --text-secondary: #aaaaaa; /* Medium Gray Text */
+  --text-interactive: #d8b4fe; /* Light Purple Interactive Text */
+  --canvas-bg: #181818; /* Canvas Background */
+  --grid-lines: #282828; /* Grid Lines */
+  --shadow-color: rgba(107, 33, 168, 0.3); /* Purple Shadow */
+}
+.wrapper {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--node-bg);
+  min-width: 200px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.react-flow__node-table-wrapper {
+  padding: 8px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.icon {
+  display: flex;
+  padding: 4px;
+  background: var(--icon-bg);
+  border-radius: 4px;
+}
+
+.title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-align: left;
+}
+
+td {
+  padding: 8px;
+  font-size: 0.75rem;
+  color: var(--text-primary);
+}
+
+.type-label {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  margin-right: 8px;
+}

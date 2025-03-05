@@ -1,0 +1,104 @@
+@keyframes shine {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes pan {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-shine {
+  animation: shine 4s linear infinite;
+}
+
+.animate-pan {
+  animation: pan 20s linear infinite;
+}
+
+/*.animate-spin-slow {
+  animation: spin-slow 30s linear infinite;
+}
+*/
+
+@keyframes inner-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.shadow-glow-purple {
+  filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.5));
+}
+
+.animate-inner-spin {
+  animation: inner-spin 15s linear infinite;
+}
+
+@keyframes float-label {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(2deg);
+  }
+}
+
+.quirky-label {
+  animation: float-label 5s ease-in-out infinite;
+}
+
+@keyframes flow {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-flow {
+  animation: flow 2s linear infinite;
+}
+.animate-rotate {
+  animation: rotate 4s linear infinite;
+}
+.animate-shimmer {
+  animation: shimmer 3s linear infinite;
+}
