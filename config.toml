@@ -1,13 +1,13 @@
 [main]
 mkdocs_dir = "docs"
 docs_dir_name = "docs"
-input_path = "meowdoc"
+input_path = "src"
 create_mkdocs = false
 
 [project]
-name = "Meowdoc"
-description = "Meow! Meowdoc is a tool to generate documentation so that you don't have to :3. Read the documentation to find more!"
-repo_url = "https://github.com/re-masashi/meowdoc"
+name = "Ekono"
+description = "Ekono is a system for building customisable AI pipelines by chaining a ton of models. There can be an infinite number of combinations. There's about 50 such types of models available. Each type having between 2 and 10 state of the art models."
+repo_url = "https://github.com/re-masashi/ekono"
 
 [ignore]
 patterns = [
@@ -17,7 +17,9 @@ patterns = [
     ".git",
     "__pycache__",
     ".env",
-    "requirements.txt"
+    "requirements.txt",
+    "*.css",
+    "*.svg"
 ]
 
 [llm]

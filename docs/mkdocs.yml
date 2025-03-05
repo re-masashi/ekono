@@ -1,0 +1,13 @@
+nav:
+- Home: index.md
+- API:
+  - App: App.md
+  - main: main.md
+  - router: router.md
+  - editor: editor.md
+  - operational_node_components: operational_node_components.md
+  - editor_sidebar: editor_sidebar.md
+  - Dashboard: Dashboard.md
+site_name: Ekono
+theme:
+  name: material
