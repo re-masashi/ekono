@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 secrets
+
+__pycache__
+.venv
