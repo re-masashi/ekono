@@ -2,30 +2,36 @@ import {
   createRouter,
   createRootRoute,
   createRoute,
+  redirect,
 } from "@tanstack/react-router";
-import { Outlet } from "@tanstack/react-router"; // IMPORT Outlet, but no Link here
+import { Outlet } from "@tanstack/react-router";
 
 import App from "./App";
 import Editor from "./editor";
-// Import components from Dashboard.jsx (Corrected names!)
-import DashboardLayout, {
-  DashboardPage,
-  WorkflowListPage,
-  WorkflowDetailPage,
-  WorkflowEditorPage,
-} from "./Dashboard"; // Correct import with DashboardLayout and page components
+import signin from "./signin";
+import signup from "./signup";
+import { LogoutRoute } from './logout';
+// import DashboardLayout, {
+//   // DashboardPage,
+//   // WorkflowListPage,
+//   // WorkflowDetailPage,
+//   // WorkflowEditorPage,
+// } from "./Dashboard";
+import { Dashboard, Workflows, Models, Usage, Credits } from "./Dashboard";
 
-// Root component (layout wrapper)
-const RootComponent = () => {
-  return <Outlet />;
-};
+import NotFoundPage from './404';
 
-// Create root route
+// Authentication check function
+const isAuthenticated = () => !!localStorage.getItem('jwt_token');
+
+// Root component
+const RootComponent = () => <Outlet />;
+
 const rootRoute = createRootRoute({
   component: RootComponent,
 });
 
-// Create individual routes
+// Public routes
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
@@ -38,75 +44,191 @@ const aboutRoute = createRoute({
   component: <div>abt</div>,
 });
 
+// Authentication routes with redirects for logged-in users
+const signinRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/signin",
+  component: signin,
+  beforeLoad: ({ search }) => {
+    if (isAuthenticated()) {
+      throw redirect({
+        to: search.redirect || '/',
+      });
+    }
+  },
+});
+
+const signupRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/signup",
+  component: signup,
+  beforeLoad: ({ search }) => {
+    if (isAuthenticated()) {
+      throw redirect({
+        to: search.redirect || '/',
+      });
+    }
+  },
+});
+
+const logoutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/logout",
+  component: LogoutRoute,
+  beforeLoad: ({ location }) => {
+    if (!isAuthenticated()) {
+      throw redirect({
+        to: '/signin',
+        search: {
+          redirect: location.pathname,
+        },
+      });
+    }
+  },
+});
+
+
+// Protected routes
 const editorRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/editor/$workflowid",
   component: Editor,
+  beforeLoad: ({ location }) => {
+    if (!isAuthenticated()) {
+      throw redirect({
+        to: '/signin',
+        search: {
+          redirect: location.pathname,
+        },
+      });
+    }
+  },
 });
+
+// const dashboardRoute = createRoute({
+//   getParentRoute: () => rootRoute,
+//   path: "/dashboard",
+//   component: DashboardLayout,
+//   beforeLoad: ({ location }) => {
+//     if (!isAuthenticated()) {
+//       throw redirect({
+//         to: '/signin',
+//         search: {
+//           redirect: location.pathname,
+//         },
+//       });
+//     }
+//   },
+// });
+
 
 const dashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/dashboard",
-  component: DashboardLayout, // Use DashboardLayout here as the component
-});
-
-const dashboardIndexRoute = createRoute({
-  // Index route *under* /dashboard
-  getParentRoute: () => dashboardRoute,
-  path: "/",
-  component: DashboardPage,
+  component: Dashboard,
+  beforeLoad: ({ location }) => {
+    if (!isAuthenticated()) {
+      throw redirect({
+        to: "/signin",
+        search: {
+          redirect: location.pathname,
+        },
+      });
+    }
+  },
 });
 
 const workflowsRoute = createRoute({
-  // workflows route *under* /dashboard
   getParentRoute: () => dashboardRoute,
   path: "/workflows",
+  component: Workflows,
 });
 
-const workflowListRoute = createRoute({
-  // Workflow list under /dashboard/workflows
-  getParentRoute: () => workflowsRoute,
-  path: "/",
-  component: WorkflowListPage,
+const modelsRoute = createRoute({
+  getParentRoute: () => dashboardRoute,
+  path: "/models",
+  component: Models,
 });
 
-const workflowDetailRoute = createRoute({
-  // Workflow detail under /dashboard/workflows/$workflowId
-  getParentRoute: () => workflowsRoute,
-  path: "/$workflowId",
-  component: WorkflowDetailPage,
+const usageRoute = createRoute({
+  getParentRoute: () => dashboardRoute,
+  path: "/usage",
+  component: Usage,
 });
 
-const workflowEditorRoute = createRoute({
-  // Workflow create under /dashboard/workflows/create
-  getParentRoute: () => workflowsRoute,
-  path: "/create",
-  component: WorkflowEditorPage,
-});
-const workflowEditRoute = createRoute({
-  // Workflow edit under /dashboard/workflows/edit/$workflowId
-  getParentRoute: () => workflowsRoute,
-  path: "/edit/$workflowId",
-  component: WorkflowEditorPage,
+const creditsRoute = createRoute({
+  getParentRoute: () => dashboardRoute,
+  path: "/credits",
+  component: Credits,
 });
 
-// Create the route tree
+
+// // Dashboard child routes (all protected through parent)
+// const dashboardIndexRoute = createRoute({
+//   getParentRoute: () => dashboardRoute,
+//   path: "/",
+//   component: DashboardLayout,
+// });
+
+// const workflowsRoute = createRoute({
+//   getParentRoute: () => dashboardRoute,
+//   path: "/workflows",
+// });
+
+// const workflowListRoute = createRoute({
+//   getParentRoute: () => workflowsRoute,
+//   path: "/",
+//   component: WorkflowListPage,
+// });
+
+// const workflowDetailRoute = createRoute({
+//   getParentRoute: () => workflowsRoute,
+//   path: "/$workflowId",
+//   component: WorkflowDetailPage,
+// });
+
+// const workflowEditorRoute = createRoute({
+//   getParentRoute: () => workflowsRoute,
+//   path: "/create",
+//   component: WorkflowEditorPage,
+// });
+
+// const workflowEditRoute = createRoute({
+//   getParentRoute: () => workflowsRoute,
+//   path: "/edit/$workflowId",
+//   component: WorkflowEditorPage,
+// });
+
+const notFoundRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "*",
+  component: NotFoundPage,
+});
+
+// Route tree
 const routeTree = rootRoute.addChildren([
   indexRoute,
   aboutRoute,
+  signinRoute,
+  signupRoute,
+  logoutRoute,
   editorRoute,
+  // dashboardRoute.addChildren([
+  //   dashboardIndexRoute,
+  //   // workflowsRoute.addChildren([
+  //   //   workflowListRoute,
+  //   //   workflowDetailRoute,
+  //   //   workflowEditorRoute,
+  //   //   workflowEditRoute,
+  //   // ]),
+  // ]),
   dashboardRoute.addChildren([
-    // Add Dashboard routes as children of dashboardRoute
-    dashboardIndexRoute, // Index page for /dashboard
-    workflowsRoute.addChildren([
-      // Workflows routes under /dashboard/workflows
-      workflowListRoute,
-      workflowDetailRoute,
-      workflowEditorRoute,
-      workflowEditRoute,
-    ]),
+    workflowsRoute,
+    modelsRoute,
+    usageRoute,
+    creditsRoute,
   ]),
+  notFoundRoute,
 ]);
 
-// Create the router
 export const router = createRouter({ routeTree });
