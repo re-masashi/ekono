@@ -3,7 +3,6 @@ from datetime import datetime, UTC
 
 from sanic import Sanic, json, Request, NotFound
 from sanic_jwt import Initialize, protected
-# from sanic_cors import CORS, cross_origin
 from sanic_ext import Extend
 from sanic.exceptions import SanicException
 
@@ -21,11 +20,6 @@ app.config.CORS_ORIGINS = "*"
 Extend(app)
 
 Base = declarative_base()
-
-# SQLite Database setup
-DATABASE_URL = "sqlite+aiosqlite:///pipelines.db"
-engine = create_async_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 # Models (same as before)
 class User(Base):
@@ -55,10 +49,10 @@ class Pipeline(Base):
 # Authentication functions
 async def authenticate(request, *args, **kwargs):
     data = request.json
+    engine = request.app.ctx.engine
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
-        result = await session.execute(
-            User.__table__.select().where(User.username == data["username"])
-        )
+        result = await session.execute(User.__table__.select().where(User.username == data["username"]))
         user = result.first()
         if user and user_verify_password(user, data["password"]):
             return dict(user_id=user.id)
@@ -67,6 +61,8 @@ async def authenticate(request, *args, **kwargs):
 async def retrieve_user(request, payload, *args, **kwargs):
     if payload:
         user_id = payload.get("user_id")
+        engine = request.app.ctx.engine
+        async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
         async with async_session() as session:
             user = await session.get(User, user_id)
             return user
@@ -90,6 +86,8 @@ Initialize(
 # Middleware
 @app.middleware("request")
 async def inject_db(request):
+    engine = request.app.ctx.engine
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     request.ctx.db = async_session()
 
 @app.middleware("response")
@@ -101,13 +99,11 @@ async def close_db(request, response):
 async def register(request):
     data = request.json
     hashed_pw = hashpw(data["password"].encode(), gensalt()).decode()
+    engine = request.app.ctx.engine
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     try:
         async with async_session() as session:
-            user = User(
-                username=data["username"],
-                email=data["email"],
-                password_hash=hashed_pw
-            )
+            user = User(username=data["username"], email=data["email"], password_hash=hashed_pw)
             session.add(user)
             await session.commit()
             return json({"message": "User created successfully"}, status=201)
@@ -118,22 +114,20 @@ async def register(request):
 @protected()
 async def list_pipelines(request: Request):
     user = request.ctx.user
+    engine = request.app.ctx.engine
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
-        result = await session.execute(
-            Pipeline.__table__.select().where(Pipeline.owner_id == user.id)
-        )
+        result = await session.execute(Pipeline.__table__.select().where(Pipeline.owner_id == user.id))
         pipelines = result.all()
-        return json([{
-            "id": p.id,
-            "name": p.name,
-            "created_at": p.created_at.isoformat()
-        } for p in pipelines])
+        return json([{"id": p.id, "name": p.name, "created_at": p.created_at.isoformat()} for p in pipelines])
 
 @app.post("/pipelines")
 @protected()
 async def create_pipeline(request: Request):
     user = request.ctx.user
     data = request.json
+    engine = request.app.ctx.engine
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
         pipeline = Pipeline(
             name=data["name"],
@@ -141,7 +135,7 @@ async def create_pipeline(request: Request):
             permissions=data.get("permissions", {}),
             limitations=data.get("limitations", {}),
             billing_info=data.get("billing_info", {}),
-            owner_id=user.id
+            owner_id=user.id,
         )
         session.add(pipeline)
         await session.commit()
@@ -151,29 +145,34 @@ async def create_pipeline(request: Request):
 @protected()
 async def get_pipeline(request: Request, pipeline_id: int):
     user = request.ctx.user
+    engine = request.app.ctx.engine
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
         pipeline = await session.get(Pipeline, pipeline_id)
         if not pipeline or pipeline.owner_id != user.id:
             raise NotFound("Pipeline not found")
-        return json({
-            "id": pipeline.id,
-            "name": pipeline.name,
-            "configuration": pipeline.configuration,
-            "permissions": pipeline.permissions,
-            "limitations": pipeline.limitations,
-            "billing_info": pipeline.billing_info,
-            "created_at": pipeline.created_at.isoformat()
-        })
+        return json(
+            {
+                "id": pipeline.id,
+                "name": pipeline.name,
+                "configuration": pipeline.configuration,
+                "permissions": pipeline.permissions,
+                "limitations": pipeline.limitations,
+                "billing_info": pipeline.billing_info,
+                "created_at": pipeline.created_at.isoformat(),
+            }
+        )
 
-async def create_tables():
+async def create_tables(engine):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
-
-@app.listener('main_process_start')
+@app.listener('before_server_start')
 async def setup_db(app, loop):
-    await create_tables()
+    app.ctx.engine = create_async_engine(app.config.DB_URL, connect_args={"check_same_thread": False})
+    await create_tables(app.ctx.engine)
     print("✅ Database tables created")
 
 if __name__ == "__main__":
+    app.config.DB_URL = "sqlite+aiosqlite:///pipelines.db" #default production URL
     app.run(host="0.0.0.0", port=8000, auto_reload=True, debug=True)

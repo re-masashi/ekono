@@ -6,6 +6,10 @@ sqlalchemy[asyncio]
 asyncpg
 aiosqlite
 bcrypt
-spitfire3
 huggingface_hub
-uvicorn
+
+pytest 
+pytest-asyncio 
+httpx
+sanic-testing
+nest_asyncio
