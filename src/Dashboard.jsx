@@ -2,6 +2,14 @@ import { Outlet, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect, useRef } from "react";
 import { useQuery } from '@tanstack/react-query';
 import Chart from 'chart.js/auto';
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {Badge} from "@/components/ui/badge"
 
 // Placeholder API functions (same as before)
 const getPipelines = async () => {
@@ -55,6 +63,7 @@ const rechargeCredits = async (amount) => {
   console.log("Recharging credits:", amount);
   return { success: true, newAmount: 500 + amount };
 };
+
 function Dashboard() {
   const navigate = useNavigate();
 
@@ -71,11 +80,99 @@ function Dashboard() {
   );
 }
 
+function DashboardHome() {
+  const navigate = useNavigate();
+
+  return (
+    <div className="flex flex-col gap-5">
+      <div className="flex flex-row">
+        <h1 className="text-3xl font-bold">Recent Pipelines</h1>
+        <button className="ml-auto mr-1 lg:mr-14 bg-zinc-900 p-2 rounded-lg">Create New</button>
+      </div>
+      <div className="grid grid-cols-3 gap-3">
+        <Card className="bg-zinc-900/80 text-white/90 border-zinc-700">
+          <CardHeader className="relative mb-auto">
+            <CardDescription className="text-zinc-200 text-xl">Text to Brainrot, Audiobook and Notes Generator</CardDescription>
+            <hr className="py-0.5 border-px border-gray-200"/>
+            <CardTitle className="pt-1">
+              Bill: <span className="font-bold tabular-nums text-lg"> $1,250.00</span>
+            </CardTitle>
+          </CardHeader>
+          <CardFooter className="flex-col items-start gap-1 text-sm mt-auto">
+            <div className="line-clamp-1 flex gap-2 font-medium">
+              200K uses this month
+            </div>
+            <div className="text-muted-foreground text-zinc-400">
+              (0.00625$/use)
+            </div>
+          </CardFooter>
+        </Card>
+        <Card className="bg-zinc-900/80 text-white/90 border-zinc-700">
+          <CardHeader className="relative mb-auto">
+            <CardDescription className="text-zinc-200 text-xl">Essay Writer</CardDescription>
+            <hr className="py-0.5 border-px border-gray-200"/>
+            <CardTitle className="pt-1">
+              Bill: <span className="font-bold tabular-nums text-lg"> $250.50</span>
+            </CardTitle>
+          </CardHeader>
+          <CardFooter className="flex-col items-start gap-1 text-sm mt-auto">
+            <div className="line-clamp-1 flex gap-2 font-medium">
+              250.5K uses this month
+            </div>
+            <div className="text-muted-foreground text-zinc-400">
+              (0.001$/use)
+            </div>
+          </CardFooter>
+        </Card>
+      </div>
+
+      <div className="flex flex-row">
+        <h1 className="text-3xl font-bold">Models</h1>
+        <button className="ml-auto mr-1 lg:mr-14 bg-zinc-900 p-2 rounded-lg">See All</button>
+      </div>
+      <div className="grid grid-cols-3 gap-3">
+        <Card className="bg-zinc-900/80 text-white/90 border-zinc-700">
+          <CardHeader className="relative mb-auto">
+            <CardDescription className="text-zinc-200 text-xl">DeepSeek-R1</CardDescription>
+            <hr className="py-0.5 border-px border-gray-200"/>
+            <div className="flex flex-row gap-2">
+              <Badge className="bg-red-400/20">Text Generation</Badge>
+              {/*<Badge className="bg-red-400/20"></Badge>*/}
+            </div>
+            <CardDescription className="text-zinc-200 text-sm">DeepSeek-R1 is a state of the art reasoning model.</CardDescription>
+          </CardHeader>
+          <CardFooter className="flex-col items-start gap-1 text-sm mt-auto">
+            <div className="line-clamp-1 flex gap-2 font-medium">
+              30$ per million tokens
+            </div>
+          </CardFooter>
+        </Card>
+        <Card className="bg-zinc-900/80 text-white/90 border-zinc-700">
+          <CardHeader className="relative mb-auto">
+            <CardDescription className="text-zinc-200 text-xl">Ekono TextHum Pro</CardDescription>
+            <hr className="py-0.5 border-px border-gray-200"/>
+            <div className="flex flex-row gap-2">
+              <Badge className="bg-green-400/20">Text Humanization</Badge>
+              {/*<Badge className="bg-red-400/20"></Badge>*/}
+            </div>
+            <CardDescription className="text-zinc-200 text-sm">Ekono TextHum Pro is the successor to the Ekono TextHum model with increased accuracy.</CardDescription>
+          </CardHeader>
+          <CardFooter className="flex-col items-start gap-1 text-sm mt-auto">
+            <div className="line-clamp-1 flex gap-2 font-medium">
+              30$ per million tokens
+            </div>
+          </CardFooter>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
 function Sidebar() {
   const navigate = useNavigate();
   return (
     <aside className="bg-zinc-800 text-white w-64 p-6 flex flex-col ">
-      <h2 className="text-2xl font-semibold mb-10 text-center">Dashboard</h2>
+      {/*<h2 className="text-2xl font-semibold mb-10 text-center">Dashboard</h2>*/}
       <nav className="flex-1">
         <button
           className="block w-full text-left py-3 px-4 hover:bg-zinc-700 transition duration-300 ease-in-out rounded-lg mb-3 border border-zinc-700"
@@ -109,7 +206,7 @@ function Sidebar() {
 function Navbar() {
   return (
     <nav className="bg-zinc-900 p-6 shadow-md">
-      <h1 className="text-2xl font-semibold">Your Dashboard</h1>
+      <h1 className="text-2xl font-semibold">Dashboard</h1>
     </nav>
   );
 }
@@ -215,4 +312,4 @@ function Credits() {
   );
 }
 
-export { Dashboard, Workflows, Models, Usage, Credits };
+export { Dashboard, DashboardHome, Workflows, Models, Usage, Credits };

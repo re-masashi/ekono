@@ -17,7 +17,7 @@ import { LogoutRoute } from './logout';
 //   // WorkflowDetailPage,
 //   // WorkflowEditorPage,
 // } from "./Dashboard";
-import { Dashboard, Workflows, Models, Usage, Credits } from "./Dashboard";
+import { Dashboard, DashboardHome, Workflows, Models, Usage, Credits } from "./Dashboard";
 
 import NotFoundPage from './404';
 
@@ -105,23 +105,6 @@ const editorRoute = createRoute({
   },
 });
 
-// const dashboardRoute = createRoute({
-//   getParentRoute: () => rootRoute,
-//   path: "/dashboard",
-//   component: DashboardLayout,
-//   beforeLoad: ({ location }) => {
-//     if (!isAuthenticated()) {
-//       throw redirect({
-//         to: '/signin',
-//         search: {
-//           redirect: location.pathname,
-//         },
-//       });
-//     }
-//   },
-// });
-
-
 const dashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/dashboard",
@@ -136,6 +119,12 @@ const dashboardRoute = createRoute({
       });
     }
   },
+});
+
+const dashboardHomeRoute = createRoute({
+  getParentRoute: () => dashboardRoute,
+  path: "/",
+  component: DashboardHome,
 });
 
 const workflowsRoute = createRoute({
@@ -162,43 +151,6 @@ const creditsRoute = createRoute({
   component: Credits,
 });
 
-
-// // Dashboard child routes (all protected through parent)
-// const dashboardIndexRoute = createRoute({
-//   getParentRoute: () => dashboardRoute,
-//   path: "/",
-//   component: DashboardLayout,
-// });
-
-// const workflowsRoute = createRoute({
-//   getParentRoute: () => dashboardRoute,
-//   path: "/workflows",
-// });
-
-// const workflowListRoute = createRoute({
-//   getParentRoute: () => workflowsRoute,
-//   path: "/",
-//   component: WorkflowListPage,
-// });
-
-// const workflowDetailRoute = createRoute({
-//   getParentRoute: () => workflowsRoute,
-//   path: "/$workflowId",
-//   component: WorkflowDetailPage,
-// });
-
-// const workflowEditorRoute = createRoute({
-//   getParentRoute: () => workflowsRoute,
-//   path: "/create",
-//   component: WorkflowEditorPage,
-// });
-
-// const workflowEditRoute = createRoute({
-//   getParentRoute: () => workflowsRoute,
-//   path: "/edit/$workflowId",
-//   component: WorkflowEditorPage,
-// });
-
 const notFoundRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "*",
@@ -223,6 +175,7 @@ const routeTree = rootRoute.addChildren([
   //   // ]),
   // ]),
   dashboardRoute.addChildren([
+    dashboardHomeRoute,
     workflowsRoute,
     modelsRoute,
     usageRoute,

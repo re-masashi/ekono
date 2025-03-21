@@ -38,7 +38,7 @@ def app():
             await conn.run_sync(Base.metadata.drop_all)
             await conn.run_sync(Base.metadata.create_all)
 
-    sanic_app.blueprint(your_app_module) #register all blueprints from your main app.
+    sanic_app.blueprint(your_app_module) # register all blueprints from your main app.
     return sanic_app
 
 @pytest_asyncio.fixture
@@ -79,6 +79,7 @@ async def create_pipeline(db_session, create_user):
         await db_session.commit()
         return pipeline
     return _create_pipeline
+
 @pytest.mark.asyncio
 async def test_register(test_client):
     data = {"username": "testuser", "email": "test@example.com", "password": "password123"}

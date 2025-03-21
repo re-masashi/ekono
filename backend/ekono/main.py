@@ -17,6 +17,8 @@ import asyncio
 
 app = Sanic("PipelineManager")
 app.config.CORS_ORIGINS = "*"
+app.config.DB_URL = "sqlite+aiosqlite:///pipelines.db" #default production URL
+
 Extend(app)
 
 Base = declarative_base()
