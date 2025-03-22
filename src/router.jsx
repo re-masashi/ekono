@@ -11,13 +11,7 @@ import Editor from "./editor";
 import signin from "./signin";
 import signup from "./signup";
 import { LogoutRoute } from './logout';
-// import DashboardLayout, {
-//   // DashboardPage,
-//   // WorkflowListPage,
-//   // WorkflowDetailPage,
-//   // WorkflowEditorPage,
-// } from "./Dashboard";
-import { Dashboard, DashboardHome, Workflows, Models, Usage, Credits } from "./Dashboard";
+import { Dashboard, DashboardHome, Pipelines, Models, Usage, Credits } from "./Dashboard";
 
 import NotFoundPage from './404';
 
@@ -91,7 +85,7 @@ const logoutRoute = createRoute({
 // Protected routes
 const editorRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/editor/$workflowid",
+  path: "/editor/$pipelineid",
   component: Editor,
   beforeLoad: ({ location }) => {
     if (!isAuthenticated()) {
@@ -127,10 +121,10 @@ const dashboardHomeRoute = createRoute({
   component: DashboardHome,
 });
 
-const workflowsRoute = createRoute({
+const pipelinesRoute = createRoute({
   getParentRoute: () => dashboardRoute,
-  path: "/workflows",
-  component: Workflows,
+  path: "/pipelines",
+  component: Pipelines,
 });
 
 const modelsRoute = createRoute({
@@ -165,18 +159,9 @@ const routeTree = rootRoute.addChildren([
   signupRoute,
   logoutRoute,
   editorRoute,
-  // dashboardRoute.addChildren([
-  //   dashboardIndexRoute,
-  //   // workflowsRoute.addChildren([
-  //   //   workflowListRoute,
-  //   //   workflowDetailRoute,
-  //   //   workflowEditorRoute,
-  //   //   workflowEditRoute,
-  //   // ]),
-  // ]),
   dashboardRoute.addChildren([
     dashboardHomeRoute,
-    workflowsRoute,
+    pipelinesRoute,
     modelsRoute,
     usageRoute,
     creditsRoute,

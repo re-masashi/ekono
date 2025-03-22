@@ -189,6 +189,7 @@ const GlobalStyles = () => (
       font-size: 16px;
       margin-bottom: 2px;
       line-height: 1;
+      background-color: var(--editor-bg);
       color: var(--text-primary); /* Node title text color - white */
     }
 
