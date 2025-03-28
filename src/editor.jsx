@@ -1,5 +1,4 @@
-import React from "react";
-import {
+import React, {
   useRef,
   useCallback,
   useContext,
@@ -7,6 +6,7 @@ import {
   useState,
   memo,
 } from "react";
+import { useParams } from '@tanstack/react-router'
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -34,6 +34,7 @@ import {
 // Add at the top of editor.jsx
 import { NODES_CONFIG } from "./operational_node_components";
 import Sidebar from "./editor_sidebar";
+import {getPipeline} from './api'
 
 import "@xyflow/react/dist/style.css";
 import "./reactflow.css";
@@ -1091,7 +1092,8 @@ const DnDFlow = () => {
   const [selectedNodes, setSelectedNodes] = useState([]);
   const [selectedEdges, setSelectedEdges] = useState([]);
   const [nodeIdCounter, setNodeIdCounter] = useState(0);
-
+  const {pipelineid} = useParams({ from: "/editor/$pipelineid" })
+  
   const nodeToJSON = () => ({
     nodes: nodes.map((node) => {
       const { icon, ...restData } = node.data;
@@ -1320,7 +1322,7 @@ const DnDFlow = () => {
     >
       {/* Main DnDFlow container background and text */}
       <GlobalStyles />
-      <Sidebar />
+      <Sidebar pipeline={getPipeline(pipelineid)} />
       <div
         className="reactflow-wrapper rounded-xl border border-zinc-800 overflow-hidden flex-grow shadow-xl"
         style={{

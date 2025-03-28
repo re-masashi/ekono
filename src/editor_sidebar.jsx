@@ -40,14 +40,17 @@ function timedCounter(setRunningPercent) {
   };
 }
 
-const Sidebar = () => {
+const Sidebar = ({pipeline}) => {
   const setType = useDnD()[1];
 
   const onDragStart = (event, nodeType) => {
     setType(nodeType);
     event.dataTransfer.effectAllowed = "move";
   };
+  
   const [runningPercent, setRunningPercent] = React.useState(null);
+  const [saved, setSaved] = React.useState(null);
+
   const counterRef = React.useRef(null); // Ref to store the counter object
 
   React.useEffect(() => {
@@ -648,10 +651,12 @@ const Sidebar = () => {
           <input
             className="bg-transparent outline-none w-[50%]"
             placeholder="filename"
-            value="example_workflow"
+            value={pipeline.name}
             readOnly={true}
           />
-          <button className="hover:bg-zinc-800 px-2 rounded">saved</button>
+          <button className="hover:bg-zinc-800 px-2 rounded">{
+            saved?"saved":"saving"
+          }</button>
           <button className="hover:bg-zinc-800 px-2 rounded" onClick={run}>
             {runningPercent === null ? "run" : "stop"}
           </button>

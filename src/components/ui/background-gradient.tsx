@@ -1,10 +1,9 @@
+ 'use client' 
 import { cn } from "@/lib/utils";
 import React from "react";
 import { motion } from "motion/react";
 
-export 
-
-const BackgroundGradient = ({
+export const BackgroundGradient = ({
   children,
   className,
   containerClassName,
