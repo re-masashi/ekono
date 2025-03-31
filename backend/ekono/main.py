@@ -56,8 +56,15 @@ async def authenticate(request, *args, **kwargs):
     async with async_session() as session:
         result = await session.execute(User.__table__.select().where(User.username == data["username"]))
         user = result.first()
-        if user and user_verify_password(user, data["password"]):
-            return dict(user_id=user.id)
+        if user:
+            print(f"User found: {user}")  # Debugging line
+            if user_verify_password(user, data["password"]):
+                print("Password matched!")  # Debugging line
+                return dict(user_id=user.id)
+            else:
+                print("password mismatch")
+        else:
+            print("user not found: {user}")
     raise SanicException("Invalid credentials", status_code=401)
 
 async def retrieve_user(request, payload, *args, **kwargs):

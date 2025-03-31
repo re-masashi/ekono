@@ -235,7 +235,7 @@ export default function Home() {
                 <div className="md:absolute md:top-4 md:right-4 flex items-center gap-2 bg-gray-900/80 px-2 py-1 rounded-full border border-purple-500/30 mt-4 md:mt-0">
                   <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
                   <span className="text-sm font-medium text-purple-300">
-                    Trusted by Fortune 500
+                    Trusted by Enterprises
                   </span>
                 </div>
               </div>
