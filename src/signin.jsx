@@ -124,7 +124,7 @@ export default function SignInForm() {
             {isPending ? 'Signing In...' : 'Sign In'}
           </motion.button>
 
-          <div className="text-zinc-300 text-sm text-center">No account? <a className="text-zinc-200 font-bold" href="/signin">Sign Up</a></div>
+          <div className="text-zinc-300 text-sm text-center">No account? <a className="text-zinc-200 font-bold" href="/signup">Sign Up</a></div>
 
           {/* Social Login */}
           <div className="flex items-center gap-4">

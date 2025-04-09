@@ -26,5 +26,5 @@ export const getPipeline = (pipelineId, auth, opts) => {
   if (pipelineId>pipelines.length)
     throw new Error(error.message || 'No such pipeline found.')
 
-  return pipelines[pipelineId]
+  return pipelines[pipelineId-1]
 }
